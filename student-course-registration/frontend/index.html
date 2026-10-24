@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CourseHub - Student Course Registration & Academic Portal</title>
+  <meta name="description" content="Comprehensive Student Course Registration Portal with live seat rush alerts, waitlists, syllabus popups, sorting, timetable, and degree progress tracker.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="app-layout">
+    <!-- TOP NAVIGATION -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="sidebarToggle" class="icon-btn mobile-only" aria-label="Toggle Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="brand" onclick="switchTab('catalog')">
+          <div class="brand-emblem">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title">
+              <span>COURSE HUB</span>
+              <span class="badge-portal">PORTAL</span>
+            </div>
+            <span class="brand-subtitle">Student Course Registration Portal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-center search-bar-container">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="globalCourseSearch" placeholder="Search courses by code, title, faculty, keywords..." autocomplete="off" oninput="handleSearchCourses(this.value)">
+          <span class="search-shortcut">Ctrl + K</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Quick Nav Links -->
+        <button class="nav-top-link" onclick="switchTab('academic-calendar')">
+          <i class="fa-regular fa-calendar"></i> Academic Dates
+        </button>
+        <button class="nav-top-link" onclick="switchTab('faq')">
+          <i class="fa-regular fa-circle-question"></i> FAQ & Help
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="icon-btn" title="Toggle Light/Dark Theme">
+          <i class="fa-solid fa-moon theme-icon"></i>
+        </button>
+
+        <!-- Profile Pill -->
+        <div class="user-profile-pill" onclick="switchTab('profile')">
+          <div class="avatar-circle" id="headerAvatar">ST</div>
+          <div class="user-meta hidden-sm">
+            <span class="user-name" id="headerStudentName">Student Profile</span>
+            <span class="user-role" id="headerRollDisplay">Click to Edit Profile</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <div class="app-body">
+      <!-- SIDEBAR -->
+      <aside class="app-sidebar" id="appSidebar">
+        <!-- Student Brief Info Card -->
+        <div class="freshman-welcome-card" onclick="switchTab('profile')" style="cursor: pointer;" title="Click to view & edit your profile">
+          <div class="freshman-avatar" id="sidebarAvatarCircle">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div class="freshman-info">
+            <h4 id="sidebarStudentName">Student Account</h4>
+            <p id="sidebarStudentMajor">Click to Setup Profile</p>
+            <span class="badge-semester">Undergraduate Student</span>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav">
+          <span class="nav-section-label">COURSE REGISTRATION</span>
+          <button class="nav-item active" data-tab="catalog">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Course Catalog</span>
+            <span class="nav-badge" id="catalogBadgeCount">12</span>
+          </button>
+
+          <button class="nav-item" data-tab="student-register">
+            <i class="fa-solid fa-id-card"></i>
+            <span>Student Registration</span>
+            <span class="nav-badge hot" id="regStatusBadge">Start Here</span>
+          </button>
+
+          <button class="nav-item" data-tab="my-courses">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>My Enrolled Courses</span>
+            <span class="nav-badge success" id="myCoursesBadgeCount">0</span>
+          </button>
+
+          <button class="nav-item" data-tab="timetable">
+            <i class="fa-solid fa-calendar-week"></i>
+            <span>Class Timetable & ICS</span>
+          </button>
+
+          <button class="nav-item" data-tab="slip">
+            <i class="fa-solid fa-file-arrow-down"></i>
+            <span>Registration Slip (PDF)</span>
+          </button>
+
+          <span class="nav-section-label">STUDENT TOOLS</span>
+          <button class="nav-item" data-tab="profile">
+            <i class="fa-solid fa-user-gear"></i>
+            <span>My Profile & Settings</span>
+          </button>
+
+          <button class="nav-item" data-tab="tools">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Degree Tracker & GPA</span>
+          </button>
+
+          <button class="nav-item" data-tab="academic-calendar">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>Academic Calendar</span>
+          </button>
+
+          <span class="nav-section-label">CAMPUS & HELP</span>
+          <button class="nav-item" data-tab="about">
+            <i class="fa-solid fa-building-columns"></i>
+            <span>About University</span>
+          </button>
+
+          <button class="nav-item" data-tab="faq">
+            <i class="fa-solid fa-circle-question"></i>
+            <span>FAQ & Help Guide</span>
+          </button>
+
+          <button class="nav-item" data-tab="contact">
+            <i class="fa-solid fa-envelope"></i>
+            <span>Contact & Feedback</span>
+          </button>
+        </nav>
+
+        <!-- Registration Quick Tip -->
+        <div class="freshman-guide-box">
+          <div class="guide-title"><i class="fa-solid fa-fire text-hot"></i> Seat Rush Alert:</div>
+          <p style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.4;">
+            Courses with 15% or fewer seats left pulse red with a 🔥 icon. When full, join the waitlist to receive instant opening alerts!
+          </p>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT VIEW -->
+      <main class="app-content">
+
+        <!-- ==========================================
+             TAB 1: COURSE CATALOG (MAIN VIEW)
+        =========================================== -->
+        <section id="tab-catalog" class="tab-pane active">
+          <!-- Waitlist Opening Alert Banner -->
+          <div id="waitlistAlertBanner" class="waitlist-banner hidden">
+            <div class="waitlist-banner-content">
+              <div class="waitlist-banner-icon"><i class="fa-solid fa-bell-concierge"></i></div>
+              <div class="waitlist-banner-text">
+                <strong id="waitlistAlertTitle">🎉 A seat is now open!</strong>
+                <span>Enrol before someone else does. As you are #1 on the waitlist, your seat is reserved.</span>
+              </div>
+            </div>
+            <div class="waitlist-banner-actions">
+              <button class="btn btn-sm btn-primary" id="waitlistAlertEnrolBtn"><i class="fa-solid fa-plus-circle"></i> Enrol now</button>
+              <button class="btn btn-sm btn-outline" onclick="dismissWaitlistBanner()"><i class="fa-solid fa-xmark"></i> Dismiss</button>
+            </div>
+          </div>
+
+          <!-- Hero Greeting -->
+          <div class="freshman-hero">
+            <div class="hero-left">
+              <span class="freshman-tag"><i class="fa-solid fa-sparkles"></i> Student Course Registration Portal</span>
+              <h1><span id="heroStudentGreeting">Welcome!</span> Course Catalog & Registration</h1>
+              <p>Explore undergraduate courses across Arts & Engineering. Review live seat counters, syllabus details, live views, and enroll directly.</p>
+              
+              <div class="hero-quick-stats">
+                <div class="quick-stat-chip">
+                  <i class="fa-solid fa-layer-group text-accent"></i>
+                  <span>Enrolled: <strong id="heroEnrolledCount">0 Courses</strong></span>
+                </div>
+                <div class="quick-stat-chip">
+                  <i class="fa-solid fa-graduation-cap text-success"></i>
+                  <span>Credits: <strong id="heroTotalCredits">0 Credits</strong></span>
+                </div>
+                <div class="quick-stat-chip">
+                  <i class="fa-solid fa-fire text-hot"></i>
+                  <span>Seat Status: <strong id="heroRushCount">Active Live Tracker</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-right">
+              <div class="credit-meter-box">
+                <div class="meter-header">
+                  <span>Semester Credits</span>
+                  <strong id="creditMeterNumber">0 / 20 Credits</strong>
+                </div>
+                <div class="meter-bar-track">
+                  <div class="meter-bar-fill" id="creditMeterBar" style="width: 0%;"></div>
+                </div>
+                <span class="meter-hint" id="creditMeterHint">Click 'Enroll Now' on any course below</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Department Tabs with Icons -->
+          <div class="dept-tabs-bar">
+            <span class="dept-tabs-label"><i class="fa-solid fa-filter"></i> Departments:</span>
+            <div class="dept-tabs-scroll">
+              <button class="dept-tab active" data-dept="ALL" onclick="filterByDept('ALL')">
+                <i class="fa-solid fa-border-all"></i> All Courses
+              </button>
+              <button class="dept-tab" data-dept="Computer Science" onclick="filterByDept('Computer Science')">
+                <i class="fa-solid fa-laptop-code"></i> Computer Science
+              </button>
+              <button class="dept-tab" data-dept="Electrical & Mech" onclick="filterByDept('Electrical & Mech')">
+                <i class="fa-solid fa-gears"></i> Electrical & Mech
+              </button>
+              <button class="dept-tab" data-dept="Media & Literature" onclick="filterByDept('Media & Literature')">
+                <i class="fa-solid fa-newspaper"></i> Media & Journalism
+              </button>
+              <button class="dept-tab" data-dept="Psychology" onclick="filterByDept('Psychology')">
+                <i class="fa-solid fa-brain"></i> Psychology
+              </button>
+              <button class="dept-tab" data-dept="Visual Arts" onclick="filterByDept('Visual Arts')">
+                <i class="fa-solid fa-palette"></i> Design & Arts
+              </button>
+              <button class="dept-tab" data-dept="Economics & History" onclick="filterByDept('Economics & History')">
+                <i class="fa-solid fa-chart-line"></i> Economics & History
+              </button>
+            </div>
+          </div>
+
+          <!-- Sort Bar & Search Controls -->
+          <div class="sort-toolbar-card card">
+            <div class="toolbar-left">
+              <div class="stream-pill-group">
+                <button class="stream-btn active" data-stream="ALL" onclick="filterByStream('ALL')">All Streams</button>
+                <button class="stream-btn" data-stream="Engineering" onclick="filterByStream('Engineering')">Engineering (6)</button>
+                <button class="stream-btn" data-stream="Arts" onclick="filterByStream('Arts')">Arts & Humanities (6)</button>
+                <button class="stream-btn rush-filter-btn" id="rushFilterBtn" onclick="toggleRushFilter()">
+                  <i class="fa-solid fa-fire text-hot"></i> Filling Fast
+                </button>
+              </div>
+            </div>
+
+            <div class="toolbar-right">
+              <!-- Sort Dropdown -->
+              <div class="sort-dropdown-wrap">
+                <label><i class="fa-solid fa-arrow-down-short-wide"></i> Sort by:</label>
+                <select id="courseSortSelect" class="filter-control" onchange="handleSortChange(this.value)">
+                  <option value="name_asc">Course Name (A → Z)</option>
+                  <option value="name_desc">Course Name (Z → A)</option>
+                  <option value="credits_desc">Credits (Highest first)</option>
+                  <option value="credits_asc">Credits (Lowest first)</option>
+                  <option value="seats_desc">Available Seats (Most seats left)</option>
+                  <option value="seats_asc">Available Seats (Almost full first)</option>
+                </select>
+              </div>
+
+              <!-- Difficulty Filter -->
+              <div class="sort-dropdown-wrap">
+                <label><i class="fa-solid fa-gauge"></i> Difficulty:</label>
+                <select id="difficultyFilterSelect" class="filter-control" onchange="handleDifficultyFilter(this.value)">
+                  <option value="ALL">All Levels</option>
+                  <option value="Easy">Easy</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Hard">Hard</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Cards Grid -->
+          <div class="courses-grid" id="coursesGridContainer">
+            <!-- Populated dynamically -->
+          </div>
+
+          <!-- Recently Viewed Courses Section -->
+          <div class="recently-viewed-section" id="recentlyViewedSection">
+            <div class="section-title-wrap">
+              <i class="fa-solid fa-clock-rotate-left icon-accent"></i>
+              <div>
+                <h3>Recently Viewed Courses</h3>
+                <p class="section-desc">Courses you've inspected details for during your session</p>
+              </div>
+            </div>
+            <div class="recent-courses-row" id="recentlyViewedList">
+              <p style="color: var(--text-dim); font-size: 0.85rem; padding: 1rem 0;">No courses viewed yet. Click on any course card "View Syllabus & Details" to inspect.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 2: STUDENT REGISTRATION
+        =========================================== -->
+        <section id="tab-student-register" class="tab-pane">
+          <div class="simple-setup-card card">
+            <div class="card-header border-bottom">
+              <div class="card-title-group">
+                <i class="fa-solid fa-user-plus icon-accent"></i>
+                <div>
+                  <h3>Student Registration</h3>
+                  <p class="card-subtitle">Quickly register with your name and admission number</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <form id="freshRegistrationForm" onsubmit="handleFreshStudentRegistration(event)">
+                <div class="form-group">
+                  <label>Student Full Name *</label>
+                  <input type="text" id="regFullName" required placeholder="Enter your full name (e.g., Alex Johnson)" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                  <label>Student Roll Number / Admission ID *</label>
+                  <input type="text" id="regRollNo" required placeholder="Enter your admission or roll number (e.g., 2026-ENG-042)" autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                  <label>Contact Phone Number (Optional)</label>
+                  <input type="tel" id="regPhone" placeholder="Enter phone number (e.g., +1 234 567 8900)">
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Academic Stream *</label>
+                    <select id="regStream" required onchange="handleStreamDropdownChange(this.value)">
+                      <option value="Engineering" selected>Engineering & Technology</option>
+                      <option value="Arts">Arts & Humanities</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Degree & Major Department *</label>
+                    <select id="regMajor" required>
+                      <option value="B.Tech Computer Science & Engineering">B.Tech Computer Science & Engineering</option>
+                      <option value="B.E. Robotics & Artificial Intelligence">B.E. Robotics & Artificial Intelligence</option>
+                      <option value="B.Tech Cloud Computing & DevOps">B.Tech Cloud Computing & DevOps</option>
+                      <option value="B.E. Mechanical & Electrical Engineering">B.E. Mechanical & Electrical Engineering</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-actions-bar">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-arrow-right"></i> Complete Registration & Browse Courses
+                  </button>
+                  <button type="button" class="btn btn-outline" onclick="resetRegistrationForm()">
+                    Clear Form
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 3: MY ENROLLED COURSES
+        =========================================== -->
+        <section id="tab-my-courses" class="tab-pane">
+          <div class="page-title-row">
+            <div>
+              <h2>My Enrolled Courses</h2>
+              <p class="page-subtitle">Subjects registered for current semester.</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-outline" onclick="switchTab('timetable')">
+                <i class="fa-solid fa-calendar-days"></i> View Timetable
+              </button>
+              <button class="btn btn-primary" onclick="switchTab('slip')">
+                <i class="fa-solid fa-file-pdf"></i> Download Enrolment Slip
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Course</th>
+                      <th>Code & Title</th>
+                      <th>Stream</th>
+                      <th>Difficulty</th>
+                      <th>Lecture Schedule</th>
+                      <th>Faculty</th>
+                      <th>Credits</th>
+                      <th class="text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="myEnrolledCoursesTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 4: TIMETABLE & GOOGLE CALENDAR (.ICS)
+        =========================================== -->
+        <section id="tab-timetable" class="tab-pane">
+          <div class="page-title-row">
+            <div>
+              <h2>Weekly Class Schedule & Calendar Sync</h2>
+              <p class="page-subtitle">Personalized timetable with export options.</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn btn-primary" onclick="downloadGoogleCalendarICS()">
+                <i class="fa-brands fa-google"></i> Add to Google Calendar (.ics)
+              </button>
+              <button class="btn btn-outline" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Print / PDF
+              </button>
+            </div>
+          </div>
+
+          <div class="card timetable-card">
+            <div class="table-responsive">
+              <table class="timetable-grid">
+                <thead>
+                  <tr>
+                    <th class="time-col">Day</th>
+                    <th>09:00 - 10:00 AM<br><span class="slot-time">Period 1</span></th>
+                    <th>10:00 - 11:00 AM<br><span class="slot-time">Period 2</span></th>
+                    <th>11:00 - 11:15 AM<br><span class="slot-time">Break</span></th>
+                    <th>11:15 - 12:15 PM<br><span class="slot-time">Period 3</span></th>
+                    <th>12:15 - 01:15 PM<br><span class="slot-time">Period 4</span></th>
+                    <th>01:15 - 02:00 PM<br><span class="slot-time">Lunch</span></th>
+                    <th>02:00 - 03:30 PM<br><span class="slot-time">Studio / Lab</span></th>
+                  </tr>
+                </thead>
+                <tbody id="timetableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 5: OFFICIAL PRINTABLE SLIP
+        =========================================== -->
+        <section id="tab-slip" class="tab-pane">
+          <div class="page-title-row no-print">
+            <div>
+              <h2>Official Course Enrolment Slip</h2>
+              <p class="page-subtitle">Print or save as PDF for your academic orientation file.</p>
+            </div>
+            <button class="btn btn-primary" onclick="window.print()">
+              <i class="fa-solid fa-print"></i> Print Slip / Save PDF
+            </button>
+          </div>
+
+          <div class="official-slip-sheet" id="printableSlipSheet">
+            <div class="slip-header">
+              <div class="slip-emblem"><i class="fa-solid fa-building-columns"></i></div>
+              <div class="slip-title-block">
+                <h3>METROPOLITAN UNIVERSITY</h3>
+                <h4>OFFICE OF UNDERGRADUATE ACADEMICS</h4>
+                <div class="slip-doc-pill">OFFICIAL COURSE REGISTRATION SLIP</div>
+                <span class="slip-sub">ACADEMIC YEAR 2026-2027</span>
+              </div>
+              <div class="slip-qr-box" id="slipQrCodeBox"></div>
+            </div>
+
+            <div class="slip-info-grid">
+              <div><strong>Student Name:</strong> <span id="slipStudentName">Not Registered</span></div>
+              <div><strong>Roll / Admission Number:</strong> <span id="slipRollNo">--</span></div>
+              <div><strong>Academic Stream:</strong> <span id="slipStream">Engineering & Technology</span></div>
+              <div><strong>Major / Department:</strong> <span id="slipMajor">--</span></div>
+            </div>
+
+            <table class="slip-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Course Code</th>
+                  <th>Subject Title</th>
+                  <th>Stream</th>
+                  <th>Credits</th>
+                  <th>Class Schedule</th>
+                  <th>Faculty Instructor</th>
+                </tr>
+              </thead>
+              <tbody id="slipTableBody"></tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4" style="text-align:right;"><strong>Total Enrolled Academic Credits:</strong></td>
+                  <td colspan="3"><strong id="slipTotalCredits" class="text-accent">0 Credits</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <div class="slip-signatures">
+              <div class="sig-box">
+                <div class="sig-line"></div>
+                <span id="slipSigStudentName">Signature of Student</span>
+              </div>
+              <div class="sig-box">
+                <div class="sig-stamp">OFFICIALLY REGISTERED ✓</div>
+                <div class="sig-line"></div>
+                <span>Academic Advisor</span>
+              </div>
+              <div class="sig-box">
+                <div class="sig-line"></div>
+                <span>Dean of Undergraduate Studies</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 6: PROFILE, AVATAR & PASSWORD PAGE
+        =========================================== -->
+        <section id="tab-profile" class="tab-pane">
+          <div class="page-title-row">
+            <div>
+              <h2>Student Profile & Account Settings</h2>
+              <p class="page-subtitle">Manage your student information, profile avatar, and login password.</p>
+            </div>
+          </div>
+
+          <div class="profile-page-grid">
+            <!-- Left: Avatar & Summary Card -->
+            <div class="card profile-card">
+              <div class="profile-card-header">
+                <div class="profile-avatar-large" id="profilePageAvatar">ST</div>
+                <h3 id="profilePageName">New Student</h3>
+                <p id="profilePageMajor">Not Registered</p>
+                <span class="badge-semester">Undergraduate Student</span>
+              </div>
+
+              <div class="profile-choose-avatar">
+                <label>Choose Avatar Icon:</label>
+                <div class="avatar-picker-row">
+                  <button type="button" class="avatar-pick-btn active" onclick="pickAvatar('ST')">ST</button>
+                  <button type="button" class="avatar-pick-btn" onclick="pickAvatar('KP')">KP</button>
+                  <button type="button" class="avatar-pick-btn" onclick="pickAvatar('AJ')">AJ</button>
+                  <button type="button" class="avatar-pick-btn" onclick="pickAvatar('RK')">RK</button>
+                  <button type="button" class="avatar-pick-btn" onclick="pickAvatar('🎓')">🎓</button>
+                  <button type="button" class="avatar-pick-btn" onclick="pickAvatar('🚀')">🚀</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Edit Details & Password Card -->
+            <div class="card profile-edit-card">
+              <div class="card-header border-bottom">
+                <h3><i class="fa-solid fa-pen-to-square text-accent"></i> Edit Student Information</h3>
+              </div>
+              <div class="card-body">
+                <form id="profileEditForm" onsubmit="handleSaveProfile(event)">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Full Name *</label>
+                      <input type="text" id="profNameInput" required placeholder="Enter student name">
+                    </div>
+                    <div class="form-group">
+                      <label>Student Roll Number *</label>
+                      <input type="text" id="profRollInput" required placeholder="Enter roll number">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Phone Number</label>
+                      <input type="tel" id="profPhoneInput" placeholder="+1 (555) 019-2834">
+                    </div>
+                    <div class="form-group">
+                      <label>Major / Stream</label>
+                      <input type="text" id="profMajorInput" placeholder="Major">
+                    </div>
+                  </div>
+
+                  <!-- Show/Hide Password Section with Eye Icon -->
+                  <div class="password-box-section">
+                    <div class="password-box-title">
+                      <i class="fa-solid fa-lock text-gold"></i> Account Password Security
+                    </div>
+                    <div class="form-group">
+                      <label>Password</label>
+                      <div class="password-input-wrap">
+                        <input type="password" id="studentPasswordInput" value="Freshman2026!" placeholder="Enter password">
+                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('studentPasswordInput', this)">
+                          <i class="fa-solid fa-eye"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="forgot-pass-row">
+                      <button type="button" class="text-link-btn" onclick="openForgotPasswordModal()">
+                        <i class="fa-solid fa-key"></i> Forgot Password?
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-actions-bar">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="fa-solid fa-check"></i> Save Profile Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 7: DEGREE TRACKER & GPA CALCULATOR
+        =========================================== -->
+        <section id="tab-tools" class="tab-pane">
+          <div class="page-title-row">
+            <div>
+              <h2>Degree Progress Tracker & GPA Calculator</h2>
+              <p class="page-subtitle">Track your degree credit requirements and estimate your semester GPA.</p>
+            </div>
+          </div>
+
+          <div class="tools-grid">
+            <!-- Degree Progress Ring Card -->
+            <div class="card tool-card">
+              <div class="card-header border-bottom">
+                <h3><i class="fa-solid fa-chart-pie text-accent"></i> Degree Credit Progress Ring</h3>
+              </div>
+              <div class="card-body progress-ring-body">
+                <div class="progress-ring-container">
+                  <svg class="progress-ring-svg" width="180" height="180">
+                    <circle class="ring-bg" stroke="rgba(255,255,255,0.08)" stroke-width="14" fill="transparent" r="70" cx="90" cy="90"/>
+                    <circle class="ring-fill" id="degreeProgressCircle" stroke="url(#gradientRing)" stroke-width="14" stroke-linecap="round" fill="transparent" r="70" cx="90" cy="90" style="stroke-dasharray: 440; stroke-dashoffset: 350;"/>
+                    <defs>
+                      <linearGradient id="gradientRing" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="#10b981"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div class="ring-label-wrap">
+                    <span class="ring-pct" id="degreeProgressPct">0%</span>
+                    <span class="ring-sub" id="degreeProgressCredits">0 / 120 Total</span>
+                  </div>
+                </div>
+
+                <div class="progress-details-list">
+                  <div class="prog-detail-item">
+                    <span>Semester 1 Registered:</span>
+                    <strong id="trackerSemCredits">0 Credits</strong>
+                  </div>
+                  <div class="prog-detail-item">
+                    <span>Semester 1 Target:</span>
+                    <strong>16 Credits</strong>
+                  </div>
+                  <div class="prog-detail-item">
+                    <span>Degree Completion Target:</span>
+                    <strong>120 Total Credits</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- GPA Calculator Card -->
+            <div class="card tool-card">
+              <div class="card-header border-bottom">
+                <h3><i class="fa-solid fa-calculator text-gold"></i> Semester 1 GPA Calculator</h3>
+              </div>
+              <div class="card-body">
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+                  Select expected grades for your enrolled subjects to calculate your projected GPA.
+                </p>
+
+                <div class="gpa-calc-courses-list" id="gpaCalcCoursesList">
+                  <!-- Populated dynamically -->
+                </div>
+
+                <div class="gpa-result-box">
+                  <div class="gpa-result-label">Projected Semester GPA:</div>
+                  <div class="gpa-result-value" id="projectedGpaDisplay">4.00 / 4.00</div>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="calculateGPA()">
+                    <i class="fa-solid fa-arrows-rotate"></i> Recalculate
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 8: ACADEMIC CALENDAR (DATES & HOLIDAYS)
+        =========================================== -->
+        <section id="tab-academic-calendar" class="tab-pane">
+          <div class="page-title-row">
+            <div>
+              <h2>Academic Calendar 2026-2027</h2>
+              <p class="page-subtitle">Key university dates, midterms, finals, registration windows, and holidays.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Date / Period</th>
+                      <th>Event / Milestone</th>
+                      <th>Category</th>
+                      <th>Audience</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Oct 15 - Oct 31, 2026</strong></td>
+                      <td>Fall Semester Course Registration Window</td>
+                      <td><span class="badge-semester">Registration</span></td>
+                      <td>All Undergraduates</td>
+                      <td><span class="status-badge approved"><i class="fa-solid fa-circle-play"></i> Ongoing</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nov 03, 2026</strong></td>
+                      <td>Commencement of Regular Lectures & Studio Labs</td>
+                      <td><span class="badge-semester">Academic</span></td>
+                      <td>Arts & Engineering</td>
+                      <td><span class="status-badge pending">Upcoming</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Nov 26 - Nov 28, 2026</strong></td>
+                      <td>Thanksgiving & Autumn College Holiday</td>
+                      <td><span class="badge-category elective">Holiday</span></td>
+                      <td>Campus Closed</td>
+                      <td><span class="status-badge pending">Holiday</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Dec 14 - Dec 18, 2026</strong></td>
+                      <td>Midterm Examination Period</td>
+                      <td><span class="badge-category core">Examinations</span></td>
+                      <td>All Students</td>
+                      <td><span class="status-badge pending">Scheduled</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Jan 18 - Jan 29, 2027</strong></td>
+                      <td>Semester 1 Final Examinations & Jury Reviews</td>
+                      <td><span class="badge-category core">Finals</span></td>
+                      <td>All Students</td>
+                      <td><span class="status-badge pending">Scheduled</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 9: ABOUT UNIVERSITY
+        =========================================== -->
+        <section id="tab-about" class="tab-pane">
+          <div class="about-hero-card">
+            <div class="about-hero-content">
+              <span class="freshman-tag"><i class="fa-solid fa-building-columns"></i> ESTABLISHED 1968</span>
+              <h2>Metropolitan University</h2>
+              <p>Ranked among the premier institutions for multidisciplinary education, Metropolitan University bridges the gap between technical engineering innovation and humanities-driven creative arts.</p>
+            </div>
+          </div>
+
+          <div class="about-grid">
+            <div class="card about-card">
+              <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80" alt="University Library" class="about-img" />
+              <div class="about-card-body">
+                <h3>World-Class Campus Facilities</h3>
+                <p>Features 14 high-performance computer laboratories, media production studios, mechatronics facilities, and a 500,000-volume central research library.</p>
+              </div>
+            </div>
+
+            <div class="card about-card">
+              <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80" alt="Students in Lab" class="about-img" />
+              <div class="about-card-body">
+                <h3>Interdisciplinary Curriculum</h3>
+                <p>Under our Choice-Based Credit System (CBCS), students explore engineering code labs and visual creative arts under a single unified transcript.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 10: FAQ & HELP GUIDE
+        =========================================== -->
+        <section id="tab-faq" class="tab-pane">
+          <div class="page-title-row">
+            <div>
+              <h2>Frequently Asked Questions (FAQ)</h2>
+              <p class="page-subtitle">Everything students need to know about registering for classes.</p>
+            </div>
+          </div>
+
+          <div class="faq-accordion-list">
+            <div class="faq-item card active">
+              <button class="faq-question-btn" onclick="toggleFaq(this)">
+                <span>How do I enroll in a course?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer-body">
+                <p>Go to the <strong>Course Catalog</strong> tab, browse or filter through the subjects, and click the blue <strong>"Enroll Now"</strong> button. The portal will immediately reserve your seat and add the lecture to your weekly class schedule.</p>
+              </div>
+            </div>
+
+            <div class="faq-item card">
+              <button class="faq-question-btn" onclick="toggleFaq(this)">
+                <span>What is the Seat Rush Alert and how does the waitlist work?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer-body">
+                <p>Courses show live color-coded seat indicators (Green: available, Orange: seats going, Red 🔥: filling fast with 15% or less left). When a course reaches 0 seats left, you can click <strong>"Join Waitlist"</strong>. When a seat opens up (e.g. another student drops), the first student in the waitlist queue is immediately notified with a blue banner to claim the seat!</p>
+              </div>
+            </div>
+
+            <div class="faq-item card">
+              <button class="faq-question-btn" onclick="toggleFaq(this)">
+                <span>Can I enroll in both Arts and Engineering subjects?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer-body">
+                <p>Yes! Our curriculum encourages interdisciplinary learning. Engineering students can pick Arts electives (like Digital Journalism or Visual Arts), and Arts students can take Programming or CAD Modeling.</p>
+              </div>
+            </div>
+
+            <div class="faq-item card">
+              <button class="faq-question-btn" onclick="toggleFaq(this)">
+                <span>How many credits should a student take?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer-body">
+                <p>We recommend between 12 and 18 credits per semester (usually 4 to 5 courses). The maximum allowed cap per semester is 22 credits.</p>
+              </div>
+            </div>
+
+            <div class="faq-item card">
+              <button class="faq-question-btn" onclick="toggleFaq(this)">
+                <span>How do I sync my classes to my Google Calendar?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer-body">
+                <p>Go to the <strong>Class Timetable</strong> tab and click the blue <strong>"Add to Google Calendar (.ics)"</strong> button. It downloads a standard <code>.ics</code> calendar file which automatically syncs all recurring class schedules directly into your phone or laptop calendar.</p>
+              </div>
+            </div>
+
+            <div class="faq-item card">
+              <button class="faq-question-btn" onclick="toggleFaq(this)">
+                <span>How can I drop a course if I change my mind?</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="faq-answer-body">
+                <p>Navigate to <strong>My Enrolled Courses</strong> or directly on the course card in the catalog and click the red <strong>"Drop"</strong> button. A friendly confirmation popup will ask you to confirm before freeing up the seat for waitlisted students.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 11: CONTACT & FEEDBACK
+        =========================================== -->
+        <section id="tab-contact" class="tab-pane">
+          <div class="page-title-row">
+            <div>
+              <h2>Contact University Registrar & Student Feedback</h2>
+              <p class="page-subtitle">Need help with course selections or technical assistance? Send us a message.</p>
+            </div>
+          </div>
+
+          <div class="contact-grid">
+            <div class="card contact-form-card">
+              <div class="card-header border-bottom">
+                <h3><i class="fa-solid fa-paper-plane text-accent"></i> Send Feedback / Inquiry</h3>
+              </div>
+              <div class="card-body">
+                <form onsubmit="handleSendFeedback(event)">
+                  <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="feedbackName" required placeholder="Enter your name">
+                  </div>
+                  <div class="form-group">
+                    <label>Category *</label>
+                    <select id="feedbackCategory" required>
+                      <option value="Enrollment">Course Enrollment Inquiry</option>
+                      <option value="Schedule">Schedule / Timetable Conflict</option>
+                      <option value="Technical">Portal Technical Support</option>
+                      <option value="General">General Suggestion & Feedback</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Your Message *</label>
+                    <textarea id="feedbackMessage" rows="4" required placeholder="Describe your question or feedback..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Inquiry
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <div class="card contact-info-card">
+              <div class="card-header border-bottom">
+                <h3><i class="fa-solid fa-location-dot text-gold"></i> Campus Contact Info</h3>
+              </div>
+              <div class="card-body">
+                <div class="contact-info-list">
+                  <div class="contact-info-item">
+                    <i class="fa-solid fa-building"></i>
+                    <div>
+                      <strong>Office of Academic Admissions & Records</strong>
+                      <p>Administration Building, Room 102, Campus Plaza</p>
+                    </div>
+                  </div>
+                  <div class="contact-info-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <div>
+                      <strong>Student Helpline</strong>
+                      <p>+1 (800) 425-4545 (Mon - Fri: 8:30 AM - 5:00 PM)</p>
+                    </div>
+                  </div>
+                  <div class="contact-info-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <div>
+                      <strong>Walk-in Office Hours</strong>
+                      <p>Monday - Friday, 9:00 AM - 4:30 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
+    <footer class="app-footer no-print">
+      <div class="footer-inner">
+        <div class="footer-col brand-col">
+          <div class="footer-brand">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <strong>METROPOLITAN UNIVERSITY</strong>
+          </div>
+          <p class="footer-desc">
+            Autonomous Collegiate System. Committed to empowering students through seamless academic enrollment.
+          </p>
+          <div class="footer-address">
+            <i class="fa-solid fa-location-dot"></i> 500 University Avenue, Academic Quad, Metro City, 10001
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="switchTab('catalog')">Course Catalog</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('timetable')">Weekly Schedule & ICS</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('tools')">Degree Tracker & GPA</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('slip')">Printable Registration Slip</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Student Support</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="switchTab('faq')">Student FAQ</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('academic-calendar')">Academic Calendar</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('contact')">Contact Helpdesk</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('about')">About University</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026-2027 Metropolitan University. All rights reserved. Student Course Registration Portal.</p>
+      </div>
+    </footer>
+
+    <!-- ==========================================
+         MODAL: COURSE SYLLABUS & DETAILS POPUP
+    =========================================== -->
+    <div id="courseDetailsModal" class="modal-overlay hidden">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span class="badge-category" id="modalCourseStreamBadge">Engineering</span>
+            <span class="difficulty-pill" id="modalCourseDiffBadge">Easy</span>
+            <h3 id="modalCourseTitle">Course Details</h3>
+            <span class="course-code-tag" id="modalCourseCode">ENG101</span>
+          </div>
+          <button class="modal-close-btn" onclick="closeCourseDetailsModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-img-banner" id="modalCourseImgBanner"></div>
+
+          <div class="modal-info-grid">
+            <div class="info-item">
+              <span class="info-label"><i class="fa-solid fa-graduation-cap"></i> Credits</span>
+              <strong id="modalCourseCredits">4 Academic Credits</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label"><i class="fa-solid fa-user-tie"></i> Faculty Instructor</span>
+              <strong id="modalCourseFaculty">Dr. Arvind Swaminathan</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label"><i class="fa-solid fa-clock"></i> Timings & Slot</span>
+              <strong id="modalCourseSchedule">Mon/Wed 09:00 - 10:00 AM</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label"><i class="fa-solid fa-door-open"></i> Classroom / Hall</span>
+              <strong id="modalCourseRoom">Computing Lab 1</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label"><i class="fa-solid fa-users"></i> Available Seats</span>
+              <strong id="modalCourseSeats">13 / 45 seats remaining</strong>
+            </div>
+            <div class="info-item">
+              <span class="info-label"><i class="fa-solid fa-gauge"></i> Course Difficulty</span>
+              <strong id="modalCourseDifficulty">Beginner Friendly</strong>
+            </div>
+          </div>
+
+          <!-- Syllabus breakdown in one view -->
+          <div class="modal-syllabus-box">
+            <h4><i class="fa-solid fa-list-check"></i> Course Syllabus & Learning Modules:</h4>
+            <ul id="modalCourseSyllabusList">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer" id="modalCourseActionsFooter">
+          <button class="btn btn-outline" onclick="closeCourseDetailsModal()">Close</button>
+          <button id="modalCourseEnrollBtn" class="btn btn-primary">Enroll Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL: DROP COURSE CONFIRMATION POPUP ("ARE YOU SURE?")
+    =========================================== -->
+    <div id="dropConfirmModal" class="modal-overlay hidden">
+      <div class="modal-card" style="max-width: 440px;">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <div class="warning-icon-wrap"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <h3>Drop Course Confirmation</h3>
+          </div>
+          <button class="modal-close-btn" onclick="closeDropConfirmModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main);">
+            Are you sure you want to drop <strong id="dropConfirmCourseName" class="text-accent">this course</strong>?
+          </p>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+            Dropping will free up your seat for other first-year students and remove this class from your weekly schedule.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeDropConfirmModal()">Cancel, Keep Course</button>
+          <button type="button" class="btn btn-danger" id="confirmDropBtn">
+            <i class="fa-solid fa-trash-can"></i> Yes, Drop Course
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MODAL: FORGOT PASSWORD
+    =========================================== -->
+    <div id="forgotPasswordModal" class="modal-overlay hidden">
+      <div class="modal-card" style="max-width: 460px;">
+        <div class="modal-header">
+          <h3>Reset Account Password</h3>
+          <button class="modal-close-btn" onclick="closeForgotPasswordModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+            Enter your student roll number or username. A temporary password reset link will be sent to the university registrar desk.
+          </p>
+          <form onsubmit="handleResetPassword(event)">
+            <div class="form-group">
+              <label>Student Roll Number *</label>
+              <input type="text" id="forgotRollInput" required placeholder="e.g., 2026-ENG-042">
+            </div>
+            <div class="modal-footer p-0 mt-4">
+              <button type="button" class="btn btn-outline" onclick="closeForgotPasswordModal()">Cancel</button>
+              <button type="submit" class="btn btn-primary">Send Reset Link</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
